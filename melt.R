@@ -9,13 +9,16 @@ melt_acs_data <- function(dataset, combined, metacols, name) {
   melted <- melt(df, id.var=metacols)
   split <- melted %>% separate(variable, into = c("variable", "type"), sep = -2)
   casted <- dcast(split, GeoType + GeogName + GeoID + Dataset + variable ~ type)
-  write.csv(arrange(casted, desc(GeoID)), paste(name, '.csv', sep=''), na="", row.names = FALSE)
+  final <- arrange(casted, desc(GeoID))
+  write.csv(final, paste(name, '.csv', sep=''), na="", row.names = FALSE)
+  final
 }
 
 dataset <- read_excel("~/r-acs-munge/ACSDatabase_0610-1115.xlsx", skip = 1)
 data_dictionary <- read_excel("~/r-acs-munge/data_dictionary.xlsx")
 metacols <- c("PrdctType", "Dataset", "GeoType", "GeogName", "GeoID", "FIPS", "BoroID", "CT", "BoroCT1", "BoroCT2", "NTA_Equiv", "PUMA_Equiv")
 
+# DEMOGRAPHIC
 melt_acs_data(
   dataset, 
   c(
@@ -26,7 +29,8 @@ melt_acs_data(
   'demographic'
 )
 
-melt_acs_data(
+# SOCIAL
+social <- melt_acs_data(
   dataset, 
   c(
     metacols, 
@@ -36,6 +40,20 @@ melt_acs_data(
   'social'
 )
 
+# Split social up
+chunk <- 600000
+n <- nrow(social)
+r  <- rep(1:ceiling(n/chunk),each=chunk)[1:n]
+d <- split(social,r)
+
+# write them out
+write.csv(d[[1]], 'social1.csv', na="", row.names=FALSE)
+write.csv(d[[2]], 'social2.csv', na="", row.names=FALSE)
+write.csv(d[[3]], 'social3.csv', na="", row.names=FALSE)
+write.csv(d[[4]], 'social4.csv', na="", row.names=FALSE)
+write.csv(d[[5]], 'social5.csv', na="", row.names=FALSE)
+
+# ECONOMIC
 melt_acs_data(
   dataset, 
   c(
@@ -46,6 +64,7 @@ melt_acs_data(
   'economic'
 )
 
+#HOUSING
 melt_acs_data(
   dataset, 
   c(
