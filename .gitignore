@@ -2,5 +2,7 @@
 /munged.csv
 /import.RData
 /Demographic1115_1.xlsx
-/.Rproj.user
+.Rproj.user
 /.RData
+output
+tmp
