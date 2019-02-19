@@ -1,8 +1,22 @@
-
-
 # Population FactFinder ACS / Decennial Munge
 
-This R script is an [ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) pipeline for transforming ACS and Decennial with value-add features into a structure that [NYC Population FactFinder](https://github.com/NYCPlanning/labs-nyc-factfinder) understands. The `melt.R` file transforms ACS data while `meltDecennial.R` separately transforms Decennial data.
+This R script is an [ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) pipeline for transforming ACS and Decennial with value-add features into a structure that [NYC Population FactFinder](https://github.com/NYCPlanning/labs-nyc-factfinder) understands. The `acs-munage.R` file transforms ACS data while `decennial-munge.R` separately transforms Decennial data.
+
+# Running locally
+
+Please install R and ensure the dependencies listed at the top of both R scripts are installed (`install.packages`).
+
+After loading adding the two source files (explained below) to the `input` folder, run `./bin/acs` or `./bin/decennial` in your command line
+
+# Docker
+
+Run these from within the project:
+
+`docker build .`
+`docker run -v "/Users/[YOUR PATH TO INPUT DATA]:/usr/local/src/scripts/input" -v "output:/usr/local/src/scripts/output" ff-munge ./acs`
+`docker run -v "/Users/[YOUR PATH TO INPUT DATA]:/usr/local/src/scripts/input" -v "output:/usr/local/src/scripts/output" ff-munge ./decennial`
+
+
 
 ## Input Structure
 

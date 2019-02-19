@@ -5,7 +5,7 @@ library(plyr)
 library(reshape2)
 library(uuid)
 
-sessionUUID = UUIDgenerate()
+sessionUUID = format(Sys.time(), "%Y-%m-%d-%M-%S")
 dir.create(paste('output/', sessionUUID, sep=""), showWarnings=FALSE)
 
 melt_acs_data <- function(dataset, combined, metacols, name) {
@@ -70,4 +70,4 @@ melt_acs_data(
   'housing'
 )
 
-write_csv(data_dictionary, paste('output/', sessionUUID, '/', 'factfinder_metadata.csv'))
+write_csv(data_dictionary, paste('output/', sessionUUID, '/', 'factfinder_metadata.csv', sep=""))
