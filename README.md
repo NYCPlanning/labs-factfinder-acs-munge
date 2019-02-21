@@ -13,10 +13,30 @@ After loading adding the two source files (explained below) to the `input` folde
 Run these from within the project:
 
 `docker build .`
-`docker run -v "/Users/[YOUR PATH TO INPUT DATA]:/usr/local/src/scripts/input" -v "output:/usr/local/src/scripts/output" ff-munge ./acs`
-`docker run -v "/Users/[YOUR PATH TO INPUT DATA]:/usr/local/src/scripts/input" -v "output:/usr/local/src/scripts/output" ff-munge ./decennial`
 
+```
+docker run ff-munge ./acs \
+  -v "/path/to/input:/usr/local/src/scripts/input" \
+  -v "/path/to/output:/usr/local/src/scripts/output"
+```
 
+```
+docker run ff-munge ./decennial \
+  -v "/path/to/input:/usr/local/src/scripts/input" \
+  -v "/path/to/output:/usr/local/src/scripts/output"
+```
+
+The filenames of the input data must match what the script calls for:
+
+__ACS__
+Data Dictionary_0610-1317 database_Dec172018.xlsx
+ACSDatabase_0610-1317.xlsx
+
+__Decennial__
+PFF_2000to2010_CityBoroPUMA_NTA_CT_CB_2-12-18.xlsx
+PFF_2000to2010DataDictionary-2-12-18.xlsx
+
+TODO: Make these more generic!
 
 ## Input Structure
 
