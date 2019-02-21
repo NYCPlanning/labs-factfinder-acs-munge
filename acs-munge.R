@@ -8,6 +8,7 @@ library(uuid)
 sessionUUID = format(Sys.time(), "%Y-%m-%d-%M-%S")
 dir.create(paste('output/', sessionUUID, sep=""), showWarnings=FALSE)
 
+# function to reformat original ACSDatabase and data_dictionary datasets
 melt_acs_data <- function(dataset, combined, metacols, name) {
   # NORMALIZE dictionary
   e <- paste(combined, c('E'), sep='')
@@ -18,10 +19,20 @@ melt_acs_data <- function(dataset, combined, metacols, name) {
 
   normalizedCombined <- c(e,m,z,p,c, metacols)
 
+  # a new dataframe is created, by grabbing columns from dataset
   df <- dataset[,normalizedCombined]
+
+  # melt df, identifying variable as metacols
+  # (each row in metacols will have own discrete value, whereas other variables might have values repeated for multiple rows--metadata)
   melted <- melt(df, id.var=metacols)
+
+  # “variable” column split into two columns, “variable” and “type”, at -2 position of string
   split <- melted %>% separate(variable, into = c("variable", "type"), sep = -2)
+
+  # split is dcast with left hand side (become rows) to right hand side (become columns)
   casted <- dcast(split, GeoType + GeogName + GeoID + Dataset + variable ~ type)
+
+  # order by GeoID in descending order
   final <- arrange(casted, desc(GeoID))
   write_csv(final, path=paste0('output/', sessionUUID, '/', name, '.csv', sep=''), na="")
 }
@@ -32,12 +43,14 @@ metacols <- c("PrdctType", "Dataset", "GeoType", "GeogName", "GeoID", "FIPS", "B
 
 # DEMOGRAPHIC
 melt_acs_data(
-  dataset, 
-  c(
+  dataset,
+    # new vector called “metacols”, added as columns to “dataset”,
+    # filter columns from data_dictionary, drop N/As
+    c(
     (data_dictionary[data_dictionary$Profile == 'Demographic',] %>% drop_na(VariableName))$VariableName
   ), 
-  metacols, 
-  'demographic'
+  metacols, # identifying variable in melt function
+  'demographic' # name for CSV
 )
 
 # SOCIAL
