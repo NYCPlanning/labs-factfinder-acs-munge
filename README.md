@@ -1,3 +1,5 @@
+# (DEPRECATED)
+
 # Population FactFinder ACS / Decennial Munge
 
 This R script is an [ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) pipeline for transforming ACS and Decennial with value-add features into a structure that [NYC Population FactFinder](https://github.com/NYCPlanning/labs-nyc-factfinder) understands. The `acs-munage.R` file transforms ACS data while `decennial-munge.R` separately transforms Decennial data.
